@@ -5,7 +5,7 @@
 <h1 class="mb-4">Search Movies</h1>
 
 <form method="get" class="d-flex mb-4">
-    <input type="text" name="q" class="form-control me-2" placeholder="Search for a movie" value="{{ query }}">
+    <input type="text" name="q" class="form-control me-2" placeholder="Search for a movie" value="{{ query|default_if_none:'' }}">
     <button type="submit" class="btn btn-primary">Search</button>
 </form>
 

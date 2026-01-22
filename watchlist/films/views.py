@@ -4,7 +4,7 @@ from .services import search_movies
 # Create your views here.
 
 def home(request):
-    return render(request, "home.html")
+    return render(request, "films/home.html")
 
 def movie_search(request):
     query = request.GET.get("q")
