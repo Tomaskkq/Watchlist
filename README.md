@@ -17,13 +17,13 @@ The app uses the **TMDB API** to fetch movie data for search and display.
 ## Screenshots
 
 ### Home Page
-![Home Page](screenshots/home.png)
+![Home Page](watchlist/screenshots/home.png)
 
 ### Login Page
-![Login Page](screenshots/login.png)
+![Login Page](watchlist/screenshots/login.png)
 
 ### Search Movies
-![Search Page](screenshots/search.png)
+![Search Page](watchlist/screenshots/search.png)
 
 ### Watchlist
-![Watchlist Page](screenshots/watchlist.png)
+![Watchlist Page](watchlist/screenshots/watchlist.png)
