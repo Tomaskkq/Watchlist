@@ -2,30 +2,43 @@
 {% block title %}My Watchlist{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">My Watchlist</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">My Watchlist</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Year</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for item in watchlist %}
-        <tr>
-            <td>{{ item.film.title }}</td>
-            <td>{{ item.film.year }}</td>
-            <td>{{ item.status }}</td>
-            <td>
-                <a href="#" class="btn btn-sm btn-danger">Remove</a>
-            </td>
-        </tr>
-    {% empty %}
-        <tr><td colspan="4">Your watchlist is empty.</td></tr>
-    {% endfor %}
-    </tbody>
-</table>
+    {% if watchlist %}
+    <div class="row">
+        {% for item in watchlist %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                {% if item.film.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w500{{ item.film.poster_path }}" class="card-img-top" alt="{{ item.film.title }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ item.film.title }}</h5>
+                    <p class="card-text">{{ item.film.year }}</p>
+
+                    <form method="post" action="{% url 'userlists:update_status' item.id %}" class="mb-2">
+                        {% csrf_token %}
+                        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                            {% for choice, display in item.Status.choices %}
+                                <option value="{{ choice }}" {% if item.status == choice %}selected{% endif %}>
+                                    {{ display }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+
+                    <form method="post" action="{% url 'userlists:remove_from_watchlist' item.id %}" class="mt-auto">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger w-100 btn-sm">Remove</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">Your watchlist is empty.</p>
+    {% endif %}
+</div>
 {% endblock %}

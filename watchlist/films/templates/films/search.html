@@ -2,29 +2,66 @@
 {% block title %}Search Movies{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Search Movies</h1>
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Search Movies</h1>
 
-<form method="get" class="d-flex mb-4">
-    <input type="text" name="q" class="form-control me-2" placeholder="Search for a movie" value="{{ query|default_if_none:'' }}">
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+    <form method="get" class="d-flex justify-content-center mb-4">
+        <input type="text" name="q" class="form-control me-2" style="max-width: 400px;"
+               placeholder="Search for a movie" value="{{ query|default_if_none:'' }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
 
-<div class="row">
-    {% for movie in results %}
-    <div class="col-md-3 mb-4">
-        <div class="card h-100">
-            {% if movie.poster_path %}
-            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }}">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ movie.title }}</h5>
-                <p class="card-text">{{ movie.release_date|slice:":4" }}</p>
-                <a href="#" class="btn btn-success">Add to Watchlist</a>
+    <div class="row">
+        {% for movie in results %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                {% if movie.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <p class="card-text">{{ movie.release_date|slice:":4" }}</p>
+
+                    {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'userlists:add_to_watchlist' %}" class="mt-auto">
+                        {% csrf_token %}
+                        <input type="hidden" name="tmdb_id" value="{{ movie.id }}">
+                        <input type="hidden" name="title" value="{{ movie.title }}">
+                        <input type="hidden" name="year" value="{{ movie.release_date|slice:":4" }}">
+                        <button type="submit" class="btn btn-success w-100">Add to Watchlist</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'films:search' %}" class="btn btn-secondary mt-auto w-100">Login to Add</a>
+                    {% endif %}
+
+                </div>
             </div>
         </div>
+        {% empty %}
+        <p class="text-center">No results found</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>No results found</p>
-    {% endfor %}
+
+    {% if results %}
+    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
+        <ul class="pagination">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="?q={{ query }}&page={{ page|add:'-1' }}">Previous</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ page }} of {{ total_pages }}</span>
+            </li>
+
+            {% if page < total_pages %}
+            <li class="page-item">
+                <a class="page-link" href="?q={{ query }}&page={{ page|add:'1' }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
 </div>
 {% endblock %}
