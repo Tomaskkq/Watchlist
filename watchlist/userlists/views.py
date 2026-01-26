@@ -14,10 +14,11 @@ def add_to_watchlist(request):
         tmdb_id = request.POST.get("tmdb_id")
         title = request.POST.get("title")
         year = request.POST.get("year")
+        poster_path = request.POST.get("poster_path")
 
         film, created = Film.objects.get_or_create(
             tmdb_id=tmdb_id,
-            defaults={"title": title, "year": year or None},
+            defaults={"title": title, "year": year or None, "poster_path": poster_path,},
         )
 
         Watchlist.objects.get_or_create(

@@ -27,7 +27,8 @@
                         {% csrf_token %}
                         <input type="hidden" name="tmdb_id" value="{{ movie.id }}">
                         <input type="hidden" name="title" value="{{ movie.title }}">
-                        <input type="hidden" name="year" value="{{ movie.release_date|slice:":4" }}">
+                        <input type="hidden" name="year" value="{{ movie.release_date|slice:':4' }}">
+                        <input type="hidden" name="poster_path" value="{{ movie.poster_path }}">
                         <button type="submit" class="btn btn-success w-100">Add to Watchlist</button>
                     </form>
                     {% else %}
