@@ -26,4 +26,4 @@ The app uses the **TMDB API** to fetch movie data for search and display.
 ![Search Page](watchlist/screenshots/search.png)
 
 ### Watchlist
-![Watchlist Page](watchlist/screenshots/watchlist.png)
+![Watchlist Page](watchlist/screenshots/watchlistv2.png)
